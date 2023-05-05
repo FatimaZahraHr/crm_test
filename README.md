@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-gitbash> git clone https://github.com/FatimaZahraHr/mini_projet_crm.git
+gitbash> git clone https://github.com/FatimaZahraHr/crm_test.git
 gitbash> cd mini_projet_crm
 gitbash> composer update               # install project dependencies
 gitbash> nom install                   # install packages
