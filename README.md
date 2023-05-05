@@ -10,7 +10,7 @@
 gitbash> git clone https://github.com/FatimaZahraHr/crm_test.git
 gitbash> cd crm_test
 gitbash> composer update               # install project dependencies
-gitbash> nom install                   # install packages
+gitbash> npm install                   # install packages
 # create database (you should change credentials)
 mysql> CREATE USER 'namedatabase'@'localhost' IDENTIFIED BY 'namedatabase';
 mysql> CREATE DATABASE namedatabase;
