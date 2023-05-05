@@ -11,10 +11,11 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    //se connecter
     public function login(Request $request)
     {
         $rules = array(
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         );
     
@@ -30,17 +31,17 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $user = User::where('email',$request->email)->first();
         
-        if($user->role == 2 && $user->tel == "" )
-        {
-            $response = [
-                'success' => false,
-                'message' => 'Vous ne pouvez pas se connecter : Votre compte n\'est pas encore activé'
-            ];
-            return response()->json($response);
-        }else{
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 $user = Auth::user();
+                //vérifier si le compte de l'employé est confirmé
+                if ($user->role == 2 && $user->tel == null) {
+                    $response = [
+                        'success' => false,
+                        'message' => 'Vous ne pouvez pas se connecter : Votre compte n\'est pas encore activé'
+                    ];
+                    return response()->json($response);
+                }
                 $success['token'] = $user->createToken('MyApp')->plainTextToken;
                 $success['name'] = $user->name;
                 $success['role'] = $user->role;
@@ -50,7 +51,6 @@ class AuthController extends Controller
                     'data' => $success,
                     'message' => 'Users login succesfully'
                 ];
-
                 return response()->json($response,200);
             }else{
                 $response = [
@@ -59,11 +59,13 @@ class AuthController extends Controller
                 ];
                 return response()->json($response);
             }
-        }
+        
         throw ValidationException::withMessages([
             'email' => 'Les informations d\'identification fournies ne correspondent pas à nos enregistrements.',
         ]);
     }
+
+    //se déconnecter
     public function logout(){
         Auth::logout();
     
@@ -74,6 +76,7 @@ class AuthController extends Controller
         return redirect('/login');
     }
 
+    //afficher les informations d'employé par email
     public function profil($email){
         $profil = User::where('email',$email)->first();
         return response()->json($profil);
